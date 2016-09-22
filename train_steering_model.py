@@ -27,6 +27,7 @@ def get_model(time_len=1):
   model = Sequential()
   model.add(Lambda(lambda x: x/127.5 - 1.,
             input_shape=(ch, row, col),
+            output_shape=(ch, row, col)))
   model.add(ELU())
   model.add(Convolution2D(32, 5, 5, subsample=(2, 2), border_mode="same"))
   model.add(ELU())
