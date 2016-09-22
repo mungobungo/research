@@ -27,8 +27,6 @@ def get_model(time_len=1):
   model = Sequential()
   model.add(Lambda(lambda x: x/127.5 - 1.,
             input_shape=(ch, row, col),
-            output_shape=(ch, row, col)))
-  model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
   model.add(ELU())
   model.add(Convolution2D(32, 5, 5, subsample=(2, 2), border_mode="same"))
   model.add(ELU())
@@ -45,6 +43,11 @@ def get_model(time_len=1):
 
   return model
 
+def get_dummy_model(time_len=1):
+  model=Sequential()
+  model.add(Lambda(lambda x: 0))
+  model.compile(optimizer="adam", loss="mse")
+  return model
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description='Steering angle model trainer')
@@ -59,7 +62,8 @@ if __name__ == "__main__":
   parser.set_defaults(loadweights=False)
   args = parser.parse_args()
 
-  model = get_model()
+  #model = get_model()
+  model = get_dummy_model()
   model.fit_generator(
     gen(20, args.host, port=args.port),
     samples_per_epoch=10000,
