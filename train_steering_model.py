@@ -45,13 +45,14 @@ def get_model(time_len=1):
   return model
 
 def get_dummy_model(time_len=1):
-  model=Sequential()
   ch, row, col = 3, 160, 320  # camera format
 
   model = Sequential()
-  model.add(Lambda(lambda x: 0,
+  model.add(Lambda(lambda x: x/127.5 - 1.,
                    input_shape=(ch, row, col),
                    output_shape=(ch, row, col)))
+  model.add(ELU())
+  model.add(Dense(1))
   model.compile(optimizer="adam", loss="mse")
   return model
 
